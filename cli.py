@@ -1,6 +1,6 @@
 from functions import *
 from time import *
-# print(f"It is {strftime("%b %d, %Y %H:%M:%S")}.")
+print(f"It is {strftime("%b %d, %Y %H:%M:%S")}.")
 while True:
     user_action = input("Type add, show, edit, complete or exit: ").strip()
     if user_action.startswith('add'):
