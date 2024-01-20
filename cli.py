@@ -37,15 +37,3 @@ while True:
     else:
         print("You have entered an unknown command.")
 print("BYE BYE!!!!!!!!!!!!!!!!!!!!!")
-# password = input("Enter your password: ")
-# upper_case_count = 0
-# digit_count = 0
-# for char in password:
-#     if char.isupper:
-#         upper_case_count += 1
-#     if char.isdigit():
-#         digit_count += 1
-# if len(password) > 7 and upper_case_count > 0 and digit_count > 0:
-#     print("Strong Password")
-# else:
-#     print("Weak Password")
