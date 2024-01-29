@@ -5,13 +5,13 @@ input_box = InputText(tooltip="Enter a todo", key="todo")
 add_button = Button("Add")
 list_box = Listbox(values=get_todos(), key='todos', enable_events=True, size=(45, 10))
 edit_button = Button("Edit")
-window = Window('My To-Do App', layout=[[label], [input_box, add_button], [list_box, edit_button]], font=('Helvetica', 20))
+complete_button = Button("Complete")
+exit_button = Button("Exit")
+window = Window('My To-Do App', layout=[[label], [input_box, add_button], [list_box, edit_button, complete_button], [exit_button]], font=('Helvetica', 20))
 while True:
     event, values = window.read()
     print(event)
     print(values)
-    if event in (WIN_CLOSED, 'Exit'):
-        break
     match event:
         case "Add":
             todos = get_todos()
@@ -27,8 +27,21 @@ while True:
             todos[index] = new_todo
             write_todos(todos)
             window['todos'].update(values=todos)
+        case "Complete":
+            todo_to_complete = values["todos"][0]
+            todos = get_todos()
+            todos.remove(todo_to_complete)
+            write_todos(todos)
+            window["todos"].update(values=todos)
+            window["todo"].update(value="")
+        case "Exit":
+            break
         case "todos":
+            if values['todos'] == []:
+                continue
             window['todo'].update(value=values['todos'][0])
+        case WIN_CLOSED:
+            break
 window.close()
 # import PySimpleGUI as psg
 # names = []
@@ -58,3 +71,12 @@ window.close()
 #       msg = "A new item removed : {}".format(val)
 #       window['-MSG-'].update(msg)
 # window.close()
+# class Pleasantries:
+#     def hi(self, name):
+#         return f"Hello {name}!"
+#     def salut(self, name="Nom"):
+#         return f"Salut {name}!"
+#
+#
+# bye = Pleasantries().salut("la chien")
+# print(bye)

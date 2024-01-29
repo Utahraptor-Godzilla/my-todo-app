@@ -1,3 +1,5 @@
 /venv/
 .idea
 file_compresser.py
+zip_creator.py
+compressed.zip
