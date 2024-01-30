@@ -1,5 +1,8 @@
 from functions import *
 from PySimpleGUI import *
+from time import *
+theme("DarkTeal")
+clock = Text("", key="clock")
 label = Text('Type in a to-do')
 input_box = InputText(tooltip="Enter a todo", key="todo")
 add_button = Button("Add")
@@ -7,9 +10,11 @@ list_box = Listbox(values=get_todos(), key='todos', enable_events=True, size=(45
 edit_button = Button("Edit")
 complete_button = Button("Complete")
 exit_button = Button("Exit")
-window = Window('My To-Do App', layout=[[label], [input_box, add_button], [list_box, edit_button, complete_button], [exit_button]], font=('Helvetica', 20))
+window = Window('My To-Do App', layout=[[clock], [label], [input_box, add_button], [list_box, edit_button, complete_button], [exit_button]], font=('Helvetica', 20))
 while True:
-    event, values = window.read()
+    event, values = window.read(timeout=1000)
+    window["clock"].update(value=strftime("%b %d, %Y %H:%M:%S"))
+    closed = False
     print(event)
     print(values)
     match event:
@@ -19,29 +24,36 @@ while True:
             todos.append(new_todo+'\n')
             write_todos(todos)
             window['todos'].update(values=todos)
+            window['todo'].update(value='')
         case "Edit":
-            todo_to_edit = values['todos'][0]
-            new_todo = values['todo']
-            todos = get_todos()
-            index = todos.index(todo_to_edit)
-            todos[index] = new_todo
-            write_todos(todos)
-            window['todos'].update(values=todos)
+            try:
+                todo_to_edit = values['todos'][0]
+                new_todo = values['todo']
+                todos = get_todos()
+                index = todos.index(todo_to_edit)
+                todos[index] = new_todo
+                write_todos(todos)
+                window['todos'].update(values=todos)
+            except IndexError:
+                popup("Please select an item first.", font=("Helvetica", 20))
         case "Complete":
-            todo_to_complete = values["todos"][0]
-            todos = get_todos()
-            todos.remove(todo_to_complete)
-            write_todos(todos)
-            window["todos"].update(values=todos)
-            window["todo"].update(value="")
+            try:
+                todo_to_complete = values["todos"][0]
+                todos = get_todos()
+                todos.remove(todo_to_complete)
+                write_todos(todos)
+                window["todos"].update(values=todos)
+                window["todo"].update(value="")
+            except IndexError:
+                popup("Please select an item first.", font=("Helvetica", 20))
         case "Exit":
             break
         case "todos":
-            if values['todos'] == []:
+            if not values['todos']:
                 continue
             window['todo'].update(value=values['todos'][0])
-        case WIN_CLOSED:
-            break
+        # case WIN_CLOSED:
+        #     break
 window.close()
 # import PySimpleGUI as psg
 # names = []
