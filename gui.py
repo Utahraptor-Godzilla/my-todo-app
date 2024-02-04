@@ -1,6 +1,10 @@
 from functions import *
 from PySimpleGUI import *
 from time import *
+import os
+if not os.path.exists("todos.txt"):
+    with open("todos.txt", "w") as file:
+        pass
 theme("DarkTeal")
 clock = Text("", key="clock")
 label = Text('Type in a to-do')
@@ -12,11 +16,13 @@ complete_button = Button("Complete")
 exit_button = Button("Exit")
 window = Window('My To-Do App', layout=[[clock], [label], [input_box, add_button], [list_box, edit_button, complete_button], [exit_button]], font=('Helvetica', 20))
 while True:
-    event, values = window.read(timeout=1000)
+    event, values = window.read(timeout=200)
     window["clock"].update(value=strftime("%b %d, %Y %H:%M:%S"))
     closed = False
-    print(event)
-    print(values)
+    # print(event)
+    # print(values)
+    # if event == WIN_CLOSED:
+    #     break
     match event:
         case "Add":
             todos = get_todos()
@@ -52,8 +58,10 @@ while True:
             if not values['todos']:
                 continue
             window['todo'].update(value=values['todos'][0])
-        # case WIN_CLOSED:
-        #     break
+        case '__TIMEOUT__':
+            continue
+        case WIN_CLOSED:
+            break
 window.close()
 # import PySimpleGUI as psg
 # names = []
