@@ -16,9 +16,9 @@ for index, todo in enumerate(todos):
         write_todos(todos)
         del st.session_state[todo]
         st.experimental_rerun()
-
 if "new_todo" not in st.session_state:
     st.session_state.new_todo = ""
+
 
 st.text_input(label="Enter a todo:", placeholder="Add a new todo", on_change=add_todo, key="new_todo", value="")
 # dic = {"a": "b"}
